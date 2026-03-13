@@ -8,59 +8,71 @@ let currentRoom = null;
 
 function connectSocket(){
 
-socket = io(SERVER_URL);
+socket = io(SERVER_URL,{
+transports:["websocket"]
+});
 
-socket.on("connect", () => {
+/* CONNECTION */
 
-console.log("Connected:", socket.id);
+socket.on("connect",()=>{
+
+console.log("Connected:",socket.id);
+
+});
+
+/* RECONNECT */
+
+socket.on("disconnect",()=>{
+
+console.log("Disconnected");
 
 });
 
 /* MATCH FOUND */
 
-socket.on("match_found", (roomId) => {
+socket.on("match_found",(roomId)=>{
+
+console.log("Match Found:",roomId);
 
 currentRoom = roomId;
 
 joinRoom(roomId);
 
-/* detect game */
-
 const game = localStorage.getItem("selectedGame");
 
-/* redirect to game */
+/* OPEN GAME */
 
-if(game === "ludo"){
-window.location = "ludo.html";
+if(game==="ludo"){
+window.location="ludo.html";
 }
 
-if(game === "poker"){
-window.location = "poker.html";
+if(game==="poker"){
+window.location="poker.html";
 }
 
-if(game === "rummy"){
-window.location = "rummy.html";
+if(game==="rummy"){
+window.location="rummy.html";
 }
 
-if(game === "carrom"){
-window.location = "carrom.html";
+if(game==="carrom"){
+window.location="carrom.html";
 }
 
 });
 
 /* ROOM PLAYERS */
 
-socket.on("players", (players) => {
+socket.on("players",(players)=>{
 
-console.log("Players:", players);
+console.log("Players:",players);
 
 });
 
 /* LUDO UPDATE */
 
-socket.on("ludo_update", (data) => {
+socket.on("ludo_update",(data)=>{
 
-if(typeof updateBoard === "function"){
+if(typeof updateBoard==="function"){
 updateBoard(data);
 }
 
@@ -68,9 +80,9 @@ updateBoard(data);
 
 /* POKER UPDATE */
 
-socket.on("poker_update", (data) => {
+socket.on("poker_update",(data)=>{
 
-if(typeof updatePoker === "function"){
+if(typeof updatePoker==="function"){
 updatePoker(data);
 }
 
@@ -78,9 +90,9 @@ updatePoker(data);
 
 /* RUMMY UPDATE */
 
-socket.on("rummy_update", (data) => {
+socket.on("rummy_update",(data)=>{
 
-if(typeof updateRummy === "function"){
+if(typeof updateRummy==="function"){
 updateRummy(data);
 }
 
@@ -88,9 +100,9 @@ updateRummy(data);
 
 /* CARROM UPDATE */
 
-socket.on("carrom_update", (data) => {
+socket.on("carrom_update",(data)=>{
 
-if(typeof updateCarrom === "function"){
+if(typeof updateCarrom==="function"){
 updateCarrom(data);
 }
 
@@ -101,6 +113,8 @@ updateCarrom(data);
 /* FIND MATCH */
 
 function findMatch(game){
+
+console.log("Finding match:",game);
 
 socket.emit("find_match",{
 
@@ -203,6 +217,6 @@ player:userId
 
 }
 
-/* START CONNECTION */
+/* START SOCKET */
 
 connectSocket();
