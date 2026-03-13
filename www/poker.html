@@ -4,7 +4,7 @@
 <head>
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Poker</title>
+<title>Poker Multiplayer</title>
 
 <style>
 
@@ -15,17 +15,31 @@ font-family:Arial;
 text-align:center;
 }
 
-h1{
-color:#00ffcc;
+.table{
+width:340px;
+margin:20px auto;
+background:#1a1a1a;
+padding:20px;
+border-radius:10px;
+}
+
+.cards{
+font-size:34px;
+margin:10px;
 }
 
 button{
 background:#00ffcc;
 border:none;
-padding:14px;
-border-radius:8px;
+padding:12px;
+border-radius:6px;
+font-size:16px;
+margin:6px;
+}
+
+#pot{
+margin-top:10px;
 font-size:18px;
-margin:10px;
 }
 
 </style>
@@ -34,20 +48,85 @@ margin:10px;
 
 <body>
 
-<h1>Poker Game</h1>
+<h2>Poker Multiplayer</h2>
 
-<button onclick="findMatch('poker')">
-Find Match
-</button>
+<div class="table">
 
-<br>
+<div>
+Player Cards
+</div>
 
-<button onclick="window.location='index.html'">
-Back
-</button>
+<div id="playerCards" class="cards">
+🂠 🂠
+</div>
+
+<div>
+Table Cards
+</div>
+
+<div id="tableCards" class="cards">
+🂠 🂠 🂠
+</div>
+
+<div id="pot">
+Pot: 0
+</div>
+
+<button onclick="dealCards()">Deal Cards</button>
+
+<button onclick="bet()">Bet 10</button>
+
+<button onclick="fold()">Fold</button>
+
+</div>
 
 <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 <script src="app.js"></script>
+
+<script>
+
+let deck=[
+"🂡","🂢","🂣","🂤","🂥","🂦","🂧","🂨","🂩","🂪","🂫","🂭","🂮",
+"🂱","🂲","🂳","🂴","🂵","🂶","🂷","🂸","🂹","🂺","🂻","🂽","🂾"
+]
+
+let pot=0
+
+function randomCard(){
+
+let r=Math.floor(Math.random()*deck.length)
+
+return deck[r]
+
+}
+
+function dealCards(){
+
+document.getElementById("playerCards").innerHTML=
+randomCard()+" "+randomCard()
+
+document.getElementById("tableCards").innerHTML=
+randomCard()+" "+randomCard()+" "+randomCard()
+
+}
+
+function bet(){
+
+pot+=10
+
+document.getElementById("pot").innerHTML="Pot: "+pot
+
+sendMove(10)
+
+}
+
+function fold(){
+
+alert("Player folded")
+
+}
+
+</script>
 
 </body>
 
