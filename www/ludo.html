@@ -2,19 +2,25 @@
 <html>
 <head>
 
-<title>Ludo</title>
-
+<title>ZyngoPlay Ludo</title>
 <link rel="stylesheet" href="style.css">
 
 <style>
 
-.board{
+body{
+background:#0f0f0f;
+color:white;
+text-align:center;
+font-family:Arial;
+}
+
+#board{
 display:grid;
 grid-template-columns:repeat(15,30px);
 grid-template-rows:repeat(15,30px);
 gap:2px;
 justify-content:center;
-margin-top:40px;
+margin-top:20px;
 }
 
 .cell{
@@ -23,19 +29,29 @@ height:30px;
 background:#222;
 }
 
-.red{background:red}
-.blue{background:blue}
-.green{background:green}
-.yellow{background:yellow}
+.red{background:red;}
+.blue{background:blue;}
+.green{background:green;}
+.yellow{background:yellow;}
+
+.token{
+width:20px;
+height:20px;
+border-radius:50%;
+margin:auto;
+margin-top:5px;
+}
 
 .controls{
-text-align:center;
 margin-top:20px;
 }
 
 button{
 padding:10px 20px;
 font-size:16px;
+border:none;
+border-radius:8px;
+background:#00ffc3;
 }
 
 </style>
@@ -44,9 +60,9 @@ font-size:16px;
 
 <body>
 
-<h2 style="text-align:center;">Ludo Game</h2>
+<h2>ZyngoPlay Ludo</h2>
 
-<div id="board" class="board"></div>
+<div id="board"></div>
 
 <div class="controls">
 
