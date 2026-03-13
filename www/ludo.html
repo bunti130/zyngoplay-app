@@ -37,6 +37,11 @@ padding:35px;
 border-radius:8px;
 }
 
+#dice{
+font-size:50px;
+margin-top:10px;
+}
+
 button{
 background:#00ffcc;
 border:none;
@@ -58,6 +63,10 @@ background:#444;
 
 <h1>Ludo Game</h1>
 
+<div id="dice">
+🎲
+</div>
+
 <div class="board">
 
 <div class="cell"></div>
@@ -65,7 +74,7 @@ background:#444;
 <div class="cell"></div>
 
 <div class="cell"></div>
-<div class="cell">🎲</div>
+<div class="cell"></div>
 <div class="cell"></div>
 
 <div class="cell"></div>
@@ -74,7 +83,7 @@ background:#444;
 
 </div>
 
-<button onclick="alert('Dice Rolling Coming Soon')">
+<button onclick="rollDice()">
 Roll Dice
 </button>
 
@@ -83,6 +92,18 @@ Roll Dice
 <button class="back" onclick="window.location='index.html'">
 Back to Lobby
 </button>
+
+<script>
+
+function rollDice(){
+
+var number = Math.floor(Math.random()*6)+1;
+
+document.getElementById("dice").innerHTML = number;
+
+}
+
+</script>
 
 </body>
 
