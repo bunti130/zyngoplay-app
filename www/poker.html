@@ -4,7 +4,7 @@
 <head>
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Poker Game</title>
+<title>Poker</title>
 
 <style>
 
@@ -27,9 +27,19 @@ background:#222;
 margin:30px auto;
 border-radius:20px;
 display:flex;
+flex-direction:column;
 align-items:center;
 justify-content:center;
+}
+
+.cards{
 font-size:40px;
+margin-bottom:10px;
+}
+
+#bet{
+font-size:24px;
+margin-top:10px;
 }
 
 button{
@@ -38,7 +48,7 @@ border:none;
 padding:14px;
 border-radius:8px;
 font-size:18px;
-margin-top:20px;
+margin:8px;
 }
 
 .back{
@@ -54,18 +64,66 @@ background:#444;
 <h1>Poker Table</h1>
 
 <div class="table">
-♠ ♥ ♦ ♣
+
+<div class="cards" id="cards">
+🂡 🂡
 </div>
 
-<button onclick="alert('Poker Matchmaking Coming Soon')">
-Join Table
+<div id="bet">
+Bet: 0
+</div>
+
+<button onclick="dealCards()">
+Deal Cards
 </button>
 
-<br>
+<button onclick="placeBet()">
+Place Bet
+</button>
+
+</div>
 
 <button class="back" onclick="window.location='index.html'">
-Back to Lobby
+Back
 </button>
+
+<script>
+
+var bet = 0
+
+var deck = [
+"🂡","🂢","🂣","🂤","🂥",
+"🂦","🂧","🂨","🂩","🂪",
+"🂫","🂭","🂮"
+]
+
+function randomCard(){
+
+var r = Math.floor(Math.random()*deck.length)
+return deck[r]
+
+}
+
+function dealCards(){
+
+var c1 = randomCard()
+var c2 = randomCard()
+
+document.getElementById("cards").innerHTML =
+c1 + " " + c2
+
+}
+
+function placeBet(){
+
+bet += 10
+
+document.getElementById("bet").innerHTML =
+"Bet: " + bet
+
+}
+
+</script>
 
 </body>
 
