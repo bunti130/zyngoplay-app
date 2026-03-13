@@ -1,24 +1,130 @@
-coin.className = "coin black"
+<!DOCTYPE html>
+<html>
 
-coin.style.left = Math.random()*280 + "px"
-coin.style.top = Math.random()*280 + "px"
+<head>
 
-board.appendChild(coin)
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Carrom Multiplayer</title>
+
+<style>
+
+body{
+background:#111;
+color:white;
+font-family:Arial;
+text-align:center;
+}
+
+.board{
+
+width:340px;
+height:340px;
+margin:auto;
+background:#d8b36a;
+border:8px solid #5a3a14;
+position:relative;
 
 }
 
+.coin{
+
+width:22px;
+height:22px;
+border-radius:50%;
+position:absolute;
+
 }
+
+.black{
+background:black;
+}
+
+.white{
+background:white;
+}
+
+.red{
+background:red;
+}
+
+button{
+
+margin-top:10px;
+padding:10px;
+font-size:16px;
+border:none;
+background:#00ffcc;
+border-radius:6px;
+
+}
+
+#score{
+margin-top:10px;
+font-size:18px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h2>Carrom Multiplayer</h2>
+
+<div class="board" id="board">
+
+<div class="coin black" style="top:150px;left:150px"></div>
+<div class="coin white" style="top:120px;left:150px"></div>
+<div class="coin white" style="top:180px;left:150px"></div>
+
+<div class="coin black" style="top:150px;left:120px"></div>
+<div class="coin black" style="top:150px;left:180px"></div>
+
+<div class="coin red" style="top:150px;left:150px"></div>
+
+</div>
+
+<div id="score">
+
+Player1 : 0  
+Player2 : 0
+
+</div>
+
+<button onclick="potCoin()">Pot Coin</button>
+
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+<script src="app.js"></script>
+
+<script>
+
+let p1=0
+let p2=0
+let turn=1
 
 function potCoin(){
 
-score++
+if(turn===1){
 
-document.getElementById("score").innerHTML =
-"Score: " + score
+p1++
+
+turn=2
+
+}else{
+
+p2++
+
+turn=1
 
 }
 
-createCoins()
+document.getElementById("score").innerHTML=
+
+"Player1 : "+p1+"<br>Player2 : "+p2
+
+sendMove(3)
+
+}
 
 </script>
 
