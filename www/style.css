@@ -1,0 +1,82 @@
+body{
+margin:0;
+font-family:Arial;
+background:#0f0f0f;
+color:white;
+}
+
+/* HEADER */
+
+.header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:15px;
+background:#111;
+border-bottom:1px solid #222;
+}
+
+.logo{
+font-size:22px;
+color:#00ffc3;
+font-weight:bold;
+}
+
+.wallet{
+background:#1b1b1b;
+padding:6px 12px;
+border-radius:10px;
+}
+
+/* GAME LIST */
+
+.container{
+padding:15px;
+}
+
+.game{
+display:flex;
+justify-content:space-between;
+align-items:center;
+background:#171717;
+padding:18px;
+border-radius:12px;
+margin-bottom:14px;
+}
+
+.game-name{
+font-size:18px;
+}
+
+/* PLAY BUTTON */
+
+.play-btn{
+background:#00ffc3;
+border:none;
+padding:10px 20px;
+border-radius:8px;
+font-weight:bold;
+cursor:pointer;
+}
+
+.play-btn:hover{
+background:#00e6b0;
+}
+
+/* FOOTER */
+
+.footer{
+position:fixed;
+bottom:0;
+left:0;
+right:0;
+display:flex;
+justify-content:space-around;
+background:#111;
+padding:10px 0;
+border-top:1px solid #222;
+}
+
+.footer div{
+font-size:14px;
+}
