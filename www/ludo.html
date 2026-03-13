@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ludo Game</title>
+
+<style>
+
+body{
+background:#111;
+color:white;
+font-family:Arial;
+text-align:center;
+}
+
+h1{
+color:#00ffcc;
+}
+
+.board{
+width:300px;
+height:300px;
+background:#222;
+margin:30px auto;
+display:grid;
+grid-template-columns:repeat(3,1fr);
+grid-gap:5px;
+}
+
+.cell{
+background:#333;
+padding:30px;
+border-radius:8px;
+}
+
+button{
+background:#00ffcc;
+border:none;
+padding:12px;
+border-radius:8px;
+font-size:18px;
+margin-top:20px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>Ludo Game</h1>
+
+<div class="board">
+
+<div class="cell"></div>
+<div class="cell"></div>
+<div class="cell"></div>
+
+<div class="cell"></div>
+<div class="cell">🎲</div>
+<div class="cell"></div>
+
+<div class="cell"></div>
+<div class="cell"></div>
+<div class="cell"></div>
+
+</div>
+
+<button onclick="alert('Dice Roll Coming Soon')">
+Roll Dice
+</button>
+
+</body>
+
+</html>
