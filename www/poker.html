@@ -16,7 +16,7 @@ text-align:center;
 }
 
 .table{
-width:340px;
+width:360px;
 margin:20px auto;
 background:#1a1a1a;
 padding:20px;
@@ -38,7 +38,13 @@ margin:6px;
 }
 
 #pot{
+font-size:20px;
 margin-top:10px;
+}
+
+#winner{
+margin-top:10px;
+color:#00ffcc;
 font-size:18px;
 }
 
@@ -48,21 +54,17 @@ font-size:18px;
 
 <body>
 
-<h2>Poker Multiplayer</h2>
+<h2>Poker Table</h2>
 
 <div class="table">
 
-<div>
-Player Cards
-</div>
+<div>Player Cards</div>
 
 <div id="playerCards" class="cards">
 🂠 🂠
 </div>
 
-<div>
-Table Cards
-</div>
+<div>Table Cards</div>
 
 <div id="tableCards" class="cards">
 🂠 🂠 🂠
@@ -72,11 +74,14 @@ Table Cards
 Pot: 0
 </div>
 
-<button onclick="dealCards()">Deal Cards</button>
+<div id="winner"></div>
 
-<button onclick="bet()">Bet 10</button>
-
+<button onclick="dealCards()">Deal</button>
+<button onclick="bet()">Bet</button>
+<button onclick="call()">Call</button>
+<button onclick="raiseBet()">Raise</button>
 <button onclick="fold()">Fold</button>
+<button onclick="showdown()">Showdown</button>
 
 </div>
 
@@ -86,43 +91,122 @@ Pot: 0
 <script>
 
 let deck=[
-"🂡","🂢","🂣","🂤","🂥","🂦","🂧","🂨","🂩","🂪","🂫","🂭","🂮",
-"🂱","🂲","🂳","🂴","🂵","🂶","🂷","🂸","🂹","🂺","🂻","🂽","🂾"
+"A","2","3","4","5","6","7","8","9","10","J","Q","K"
 ]
 
+let suits=["♠","♥","♦","♣"]
+
+let playerCards=[]
+let tableCards=[]
+
 let pot=0
+let currentBet=10
 
 function randomCard(){
 
-let r=Math.floor(Math.random()*deck.length)
+let value=deck[Math.floor(Math.random()*deck.length)]
+let suit=suits[Math.floor(Math.random()*suits.length)]
 
-return deck[r]
+return value+suit
 
 }
 
 function dealCards(){
 
+playerCards=[
+randomCard(),
+randomCard()
+]
+
+tableCards=[
+randomCard(),
+randomCard(),
+randomCard(),
+randomCard(),
+randomCard()
+]
+
 document.getElementById("playerCards").innerHTML=
-randomCard()+" "+randomCard()
+playerCards.join(" ")
 
 document.getElementById("tableCards").innerHTML=
-randomCard()+" "+randomCard()+" "+randomCard()
+tableCards.join(" ")
 
+document.getElementById("winner").innerHTML=""
+
+}
+
+function updatePot(){
+document.getElementById("pot").innerHTML="Pot: "+pot
 }
 
 function bet(){
 
 pot+=10
+currentBet=10
 
-document.getElementById("pot").innerHTML="Pot: "+pot
+updatePot()
 
-sendMove(10)
+sendMove("bet")
+
+}
+
+function call(){
+
+pot+=currentBet
+
+updatePot()
+
+sendMove("call")
+
+}
+
+function raiseBet(){
+
+currentBet+=10
+pot+=currentBet
+
+updatePot()
+
+sendMove("raise")
 
 }
 
 function fold(){
 
-alert("Player folded")
+document.getElementById("winner").innerHTML="Player folded"
+
+sendMove("fold")
+
+}
+
+function handScore(){
+
+let score=0
+
+playerCards.forEach(c=>{
+let v=c.slice(0,-1)
+
+if(v==="A")score+=14
+else if(v==="K")score+=13
+else if(v==="Q")score+=12
+else if(v==="J")score+=11
+else score+=parseInt(v)
+
+})
+
+return score
+
+}
+
+function showdown(){
+
+let score=handScore()
+
+document.getElementById("winner").innerHTML=
+"Your hand score: "+score+" | Pot Won!"
+
+sendMove("showdown")
 
 }
 
