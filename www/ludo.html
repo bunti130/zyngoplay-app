@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
-
 <head>
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Ludo Multiplayer</title>
+
+<title>Ludo Game</title>
 
 <style>
 
@@ -15,42 +15,41 @@ font-family:Arial;
 text-align:center;
 }
 
-.board{
-width:360px;
-margin:20px auto;
+h1{
+color:#00ffcc;
+}
+
+#board{
 display:grid;
-grid-template-columns:repeat(11,1fr);
-gap:4px;
+grid-template-columns:repeat(10,40px);
+grid-gap:4px;
+justify-content:center;
+margin-top:20px;
 }
 
 .cell{
+width:40px;
+height:40px;
 background:#333;
-padding:10px;
-border-radius:4px;
-font-size:10px;
+border-radius:6px;
+display:flex;
+align-items:center;
+justify-content:center;
 }
 
-.safe{
-background:#444;
-}
-
-.token{
+.player{
 background:#00ffcc;
 color:black;
-}
-
-#dice{
-font-size:40px;
-margin:10px;
+font-weight:bold;
 }
 
 button{
+margin-top:20px;
+padding:15px;
+font-size:18px;
 background:#00ffcc;
 border:none;
-padding:12px;
-border-radius:6px;
-font-size:16px;
-margin-top:10px;
+border-radius:8px;
 }
 
 </style>
@@ -59,13 +58,9 @@ margin-top:10px;
 
 <body>
 
-<h2>Ludo Multiplayer</h2>
+<h1>Ludo Match</h1>
 
-<div id="turn">Turn: Player 1</div>
-
-<div id="dice">🎲</div>
-
-<div id="board" class="board"></div>
+<div id="board"></div>
 
 <button onclick="rollDice()">Roll Dice</button>
 
@@ -74,67 +69,25 @@ margin-top:10px;
 
 <script>
 
-let tokens={
-p1:[0,0,0,0],
-p2:[0,0,0,0]
-}
+const board=document.getElementById("board")
 
-let turn="p1"
+let cells=[]
 
-let safeZones=[0,8,13,21,26,34,39,47]
+for(let i=0;i<100;i++){
 
-function createBoard(){
-
-let board=document.getElementById("board")
-
-for(let i=0;i<57;i++){
-
-let cell=document.createElement("div")
-
+const cell=document.createElement("div")
 cell.className="cell"
-
-if(safeZones.includes(i)){
-cell.classList.add("safe")
-}
-
-cell.id="cell"+i
-cell.innerHTML=i+1
+cell.innerText=i
 
 board.appendChild(cell)
 
-}
-
-updateBoard()
-
-}
-
-function updateBoard(){
-
-for(let i=0;i<57;i++){
-
-let c=document.getElementById("cell"+i)
-
-if(c){
-c.innerHTML=i+1
-}
-
-}
-
-tokens.p1.forEach(p=>{
-document.getElementById("cell"+p).innerHTML+=" 🔵"
-})
-
-tokens.p2.forEach(p=>{
-document.getElementById("cell"+p).innerHTML+=" 🔴"
-})
+cells.push(cell)
 
 }
 
 function rollDice(){
 
-let dice=Math.floor(Math.random()*6)+1
-
-document.getElementById("dice").innerHTML=dice
+const dice=Math.floor(Math.random()*6)+1
 
 sendMove(dice)
 
@@ -142,64 +95,28 @@ sendMove(dice)
 
 function updateBoard(data){
 
-let player=data.player
+const positions=data.positions
 
-let steps=data.steps
-
-tokens[player][0]+=steps
-
-if(tokens[player][0]>56){
-tokens[player][0]=56
-}
-
-checkKill()
-
-checkWinner()
-
-turn = turn==="p1"?"p2":"p1"
-
-document.getElementById("turn").innerHTML="Turn: "+turn
-
-updateBoard()
-
-}
-
-function checkKill(){
-
-tokens.p1.forEach((p,i)=>{
-
-tokens.p2.forEach((p2,j)=>{
-
-if(p===p2 && !safeZones.includes(p)){
-
-tokens.p2[j]=0
-
-alert("Token killed!")
-
-}
-
+cells.forEach(c=>{
+c.classList.remove("player")
 })
 
-})
+for(let player in positions){
 
-}
+let pos=positions[player]
 
-function checkWinner(){
+if(cells[pos]){
 
-if(tokens.p1.every(t=>t===56)){
-alert("Player 1 Wins!")
-}
+cells[pos].classList.add("player")
+cells[pos].innerText="P"
 
-if(tokens.p2.every(t=>t===56)){
-alert("Player 2 Wins!")
 }
 
 }
 
-createBoard()
+}
 
 </script>
 
 </body>
-
 </html>
