@@ -4,7 +4,7 @@
 <head>
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Ludo Game</title>
+<title>Ludo</title>
 
 <style>
 
@@ -17,32 +17,6 @@ text-align:center;
 
 h1{
 color:#00ffcc;
-margin-top:20px;
-}
-
-.board{
-width:320px;
-margin:30px auto;
-display:grid;
-grid-template-columns:repeat(5,1fr);
-grid-gap:6px;
-}
-
-.cell{
-background:#333;
-padding:20px;
-border-radius:8px;
-font-size:18px;
-}
-
-.token{
-background:#00ffcc;
-color:black;
-}
-
-#dice{
-font-size:50px;
-margin-top:10px;
 }
 
 button{
@@ -51,11 +25,7 @@ border:none;
 padding:14px;
 border-radius:8px;
 font-size:18px;
-margin-top:20px;
-}
-
-.back{
-background:#444;
+margin:10px;
 }
 
 </style>
@@ -66,78 +36,18 @@ background:#444;
 
 <h1>Ludo Game</h1>
 
-<div id="dice">
-🎲
-</div>
-
-<div class="board" id="board">
-
-</div>
-
-<button onclick="rollDice()">
-Roll Dice
+<button onclick="findMatch('ludo')">
+Find Match
 </button>
 
 <br>
 
-<button class="back" onclick="window.location='index.html'">
-Back to Lobby
+<button onclick="window.location='index.html'">
+Back
 </button>
 
-<script>
-
-var position = 0
-
-function createBoard(){
-
-var board = document.getElementById("board")
-
-for(let i=0;i<25;i++){
-
-var cell = document.createElement("div")
-cell.className="cell"
-cell.id="cell"+i
-cell.innerHTML=i+1
-
-board.appendChild(cell)
-
-}
-
-updateToken()
-
-}
-
-function updateToken(){
-
-for(let i=0;i<25;i++){
-
-document.getElementById("cell"+i).classList.remove("token")
-
-}
-
-document.getElementById("cell"+position).classList.add("token")
-
-}
-
-function rollDice(){
-
-var number = Math.floor(Math.random()*6)+1
-
-document.getElementById("dice").innerHTML = number
-
-position += number
-
-if(position>24){
-position=24
-}
-
-updateToken()
-
-}
-
-createBoard()
-
-</script>
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+<script src="app.js"></script>
 
 </body>
 
