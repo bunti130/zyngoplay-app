@@ -15,8 +15,22 @@ font-family:Arial;
 text-align:center;
 }
 
-h1{
-color:#00ffcc;
+.board{
+width:320px;
+margin:30px auto;
+display:grid;
+grid-template-columns:repeat(5,1fr);
+gap:6px;
+}
+
+.cell{
+background:#333;
+padding:20px;
+border-radius:6px;
+}
+
+.token{
+background:#00ffcc;
 }
 
 button{
@@ -25,7 +39,7 @@ border:none;
 padding:14px;
 border-radius:8px;
 font-size:18px;
-margin:10px;
+margin-top:20px;
 }
 
 </style>
@@ -34,20 +48,78 @@ margin:10px;
 
 <body>
 
-<h1>Ludo Game</h1>
+<h2>Ludo Multiplayer</h2>
 
-<button onclick="findMatch('ludo')">
-Find Match
-</button>
+<div id="dice">🎲</div>
 
-<br>
+<div class="board" id="board"></div>
 
-<button onclick="window.location='index.html'">
-Back
-</button>
+<button onclick="rollDice()">Roll Dice</button>
 
 <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 <script src="app.js"></script>
+
+<script>
+
+let position = 0;
+
+function createBoard(){
+
+let board = document.getElementById("board");
+
+for(let i=0;i<25;i++){
+
+let cell=document.createElement("div");
+
+cell.className="cell";
+
+cell.id="cell"+i;
+
+cell.innerHTML=i+1;
+
+board.appendChild(cell);
+
+}
+
+updateToken();
+
+}
+
+function updateToken(){
+
+for(let i=0;i<25;i++){
+
+document.getElementById("cell"+i).classList.remove("token");
+
+}
+
+document.getElementById("cell"+position).classList.add("token");
+
+}
+
+function rollDice(){
+
+let number=Math.floor(Math.random()*6)+1;
+
+document.getElementById("dice").innerHTML=number;
+
+sendMove(number);
+
+}
+
+function updateBoard(data){
+
+position += data.steps;
+
+if(position>24) position=24;
+
+updateToken();
+
+}
+
+createBoard();
+
+</script>
 
 </body>
 
