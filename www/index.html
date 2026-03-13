@@ -4,7 +4,6 @@
 <head>
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
 <title>ZyngoPlay</title>
 
 <style>
@@ -18,31 +17,32 @@ margin:0;
 padding:0;
 }
 
-h1{
+.header{
+background:#000;
+padding:20px;
+font-size:28px;
 color:#00ffcc;
-margin-top:30px;
 }
 
-.wallet{
-margin:20px;
-font-size:22px;
+.container{
+padding:20px;
 }
 
 .game{
 background:#222;
+padding:20px;
 margin:15px;
-padding:18px;
-border-radius:12px;
-font-size:22px;
+border-radius:10px;
+font-size:20px;
 }
 
 button{
 background:#00ffcc;
 border:none;
 padding:14px;
-border-radius:10px;
-font-size:20px;
-margin-top:25px;
+border-radius:8px;
+font-size:18px;
+margin-top:10px;
 }
 
 </style>
@@ -51,31 +51,58 @@ margin-top:25px;
 
 <body>
 
-<h1>ZyngoPlay</h1>
-
-<div class="wallet">
-Wallet Balance: <b>100 Coins</b>
+<div class="header">
+ZyngoPlay
 </div>
 
-<div class="game" onclick="window.location='ludo.html'">
+<div class="container">
+
+<div class="game">
 🎲 Ludo
-</div>
-
-<div class="game" onclick="window.location='poker.html'">
-♠ Poker
-</div>
-
-<div class="game" onclick="window.location='rummy.html'">
-🃏 Rummy
-</div>
-
-<div class="game" onclick="window.location='carrom.html'">
-⚫ Carrom
-</div>
-
-<button>
-Withdraw
+<br>
+<button onclick="openGame('ludo.html')">
+Play
 </button>
+</div>
+
+<div class="game">
+♠ Poker
+<br>
+<button onclick="openGame('poker.html')">
+Play
+</button>
+</div>
+
+<div class="game">
+🃏 Rummy
+<br>
+<button onclick="openGame('rummy.html')">
+Play
+</button>
+</div>
+
+<div class="game">
+⚫ Carrom
+<br>
+<button onclick="openGame('carrom.html')">
+Play
+</button>
+</div>
+
+</div>
+
+<script>
+
+function openGame(page){
+window.location = page;
+}
+
+</script>
+
+<!-- SOCKET.IO -->
+
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+<script src="app.js"></script>
 
 </body>
 
