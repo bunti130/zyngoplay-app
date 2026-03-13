@@ -1,82 +1,12 @@
 <!DOCTYPE html>
 <html>
-
 <head>
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <title>ZyngoPlay</title>
 
-<style>
-
-body{
-background:#0b0b0b;
-color:white;
-font-family:Arial;
-margin:0;
-}
-
-.header{
-background:#000;
-padding:15px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-}
-
-.logo{
-font-size:22px;
-color:#00ffcc;
-}
-
-.wallet{
-background:#222;
-padding:6px 12px;
-border-radius:6px;
-font-size:14px;
-}
-
-.container{
-padding:20px;
-}
-
-.game{
-background:#1a1a1a;
-padding:20px;
-margin-bottom:15px;
-border-radius:10px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-}
-
-.game-name{
-font-size:18px;
-}
-
-.play-btn{
-background:#00ffcc;
-border:none;
-padding:10px 18px;
-border-radius:6px;
-font-size:16px;
-}
-
-.footer{
-position:fixed;
-bottom:0;
-width:100%;
-background:#000;
-display:flex;
-justify-content:space-around;
-padding:10px 0;
-}
-
-.footer div{
-font-size:14px;
-}
-
-</style>
+<link rel="stylesheet" href="style.css">
 
 </head>
 
@@ -89,75 +19,103 @@ ZyngoPlay
 </div>
 
 <div class="wallet">
-💰 100 Coins
+💰 <span id="coins">100</span> Coins
 </div>
 
 </div>
+
 
 <div class="container">
 
-<div class="game">
+<div class="game-card">
 
-<div class="game-name">
+<div class="game-title">
 🎲 Ludo
 </div>
 
-<button class="play-btn" onclick="findMatch('ludo')">
+<button class="play-btn" onclick="playGame('ludo')">
 Play
 </button>
 
 </div>
 
-<div class="game">
 
-<div class="game-name">
+<div class="game-card">
+
+<div class="game-title">
 ♠ Poker
 </div>
 
-<button class="play-btn" onclick="findMatch('poker')">
+<button class="play-btn" onclick="playGame('poker')">
 Play
 </button>
 
 </div>
 
-<div class="game">
 
-<div class="game-name">
+<div class="game-card">
+
+<div class="game-title">
 🃏 Rummy
 </div>
 
-<button class="play-btn" onclick="findMatch('rummy')">
+<button class="play-btn" onclick="playGame('rummy')">
 Play
 </button>
 
 </div>
 
-<div class="game">
 
-<div class="game-name">
+<div class="game-card">
+
+<div class="game-title">
 ⚫ Carrom
 </div>
 
-<button class="play-btn" onclick="findMatch('carrom')">
+<button class="play-btn" onclick="playGame('carrom')">
 Play
 </button>
 
 </div>
 
 </div>
+
 
 <div class="footer">
 
 <div>🏠 Home</div>
+
 <div>🎮 Games</div>
-<div>💰 Wallet</div>
+
+<div onclick="openWallet()">💰 Wallet</div>
+
 <div>👤 Profile</div>
 
 </div>
 
+
+<div id="loading" class="loading">
+Finding Player...
+</div>
+
+
 <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+
 <script src="app.js"></script>
 
-</body>
+<script>
 
-</html></html>
+function playGame(game){
+
+localStorage.setItem("selectedGame",game)
+
+document.getElementById("loading").style.display="flex"
+
+findMatch(game)
+
+}
+
+</script>
+
+</body>
+</html>
