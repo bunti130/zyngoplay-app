@@ -4,7 +4,7 @@
 <head>
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Ludo</title>
+<title>Ludo Multiplayer</title>
 
 <style>
 
@@ -15,31 +15,42 @@ font-family:Arial;
 text-align:center;
 }
 
+h2{
+color:#00ffcc;
+}
+
 .board{
-width:320px;
-margin:30px auto;
+width:350px;
+margin:20px auto;
 display:grid;
-grid-template-columns:repeat(5,1fr);
-gap:6px;
+grid-template-columns:repeat(11,1fr);
+gap:4px;
 }
 
 .cell{
 background:#333;
-padding:20px;
-border-radius:6px;
+padding:10px;
+font-size:10px;
+border-radius:4px;
 }
 
 .token{
 background:#00ffcc;
+color:black;
+}
+
+#dice{
+font-size:40px;
+margin:10px;
 }
 
 button{
 background:#00ffcc;
 border:none;
-padding:14px;
-border-radius:8px;
-font-size:18px;
-margin-top:20px;
+padding:12px;
+border-radius:6px;
+font-size:16px;
+margin-top:10px;
 }
 
 </style>
@@ -61,63 +72,67 @@ margin-top:20px;
 
 <script>
 
-let position = 0;
+let position=0
 
 function createBoard(){
 
-let board = document.getElementById("board");
+let board=document.getElementById("board")
 
-for(let i=0;i<25;i++){
+for(let i=0;i<57;i++){
 
-let cell=document.createElement("div");
+let cell=document.createElement("div")
 
-cell.className="cell";
+cell.className="cell"
 
-cell.id="cell"+i;
+cell.id="cell"+i
 
-cell.innerHTML=i+1;
+cell.innerHTML=i+1
 
-board.appendChild(cell);
+board.appendChild(cell)
 
 }
 
-updateToken();
+updateToken()
 
 }
 
 function updateToken(){
 
-for(let i=0;i<25;i++){
+for(let i=0;i<57;i++){
 
-document.getElementById("cell"+i).classList.remove("token");
+let c=document.getElementById("cell"+i)
+
+if(c) c.classList.remove("token")
 
 }
 
-document.getElementById("cell"+position).classList.add("token");
+let t=document.getElementById("cell"+position)
+
+if(t) t.classList.add("token")
 
 }
 
 function rollDice(){
 
-let number=Math.floor(Math.random()*6)+1;
+let number=Math.floor(Math.random()*6)+1
 
-document.getElementById("dice").innerHTML=number;
+document.getElementById("dice").innerHTML=number
 
-sendMove(number);
+sendMove(number)
 
 }
 
 function updateBoard(data){
 
-position += data.steps;
+position+=data.steps
 
-if(position>24) position=24;
+if(position>56) position=56
 
-updateToken();
+updateToken()
 
 }
 
-createBoard();
+createBoard()
 
 </script>
 
