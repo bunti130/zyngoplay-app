@@ -15,52 +15,25 @@ font-family:Arial;
 text-align:center;
 }
 
-.board{
-
-width:340px;
-height:340px;
-margin:auto;
+canvas{
 background:#d8b36a;
 border:8px solid #5a3a14;
-position:relative;
-
-}
-
-.coin{
-
-width:22px;
-height:22px;
-border-radius:50%;
-position:absolute;
-
-}
-
-.black{
-background:black;
-}
-
-.white{
-background:white;
-}
-
-.red{
-background:red;
+margin-top:20px;
 }
 
 button{
-
-margin-top:10px;
-padding:10px;
-font-size:16px;
-border:none;
 background:#00ffcc;
+border:none;
+padding:10px;
 border-radius:6px;
-
+margin:5px;
+font-size:16px;
 }
 
-#score{
+#info{
 margin-top:10px;
 font-size:18px;
+color:#00ffcc;
 }
 
 </style>
@@ -69,62 +42,161 @@ font-size:18px;
 
 <body>
 
-<h2>Carrom Multiplayer</h2>
+<h2>Carrom Board</h2>
 
-<div class="board" id="board">
+<canvas id="board" width="340" height="340"></canvas>
 
-<div class="coin black" style="top:150px;left:150px"></div>
-<div class="coin white" style="top:120px;left:150px"></div>
-<div class="coin white" style="top:180px;left:150px"></div>
-
-<div class="coin black" style="top:150px;left:120px"></div>
-<div class="coin black" style="top:150px;left:180px"></div>
-
-<div class="coin red" style="top:150px;left:150px"></div>
-
+<div id="info">
+Player1 : 0 | Player2 : 0
 </div>
 
-<div id="score">
-
-Player1 : 0  
-Player2 : 0
-
-</div>
-
-<button onclick="potCoin()">Pot Coin</button>
+<button onclick="shoot()">Shoot</button>
+<button onclick="resetBoard()">Reset Board</button>
 
 <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 <script src="app.js"></script>
 
 <script>
 
+const canvas=document.getElementById("board")
+const ctx=canvas.getContext("2d")
+
+let striker
+let coins
+
 let p1=0
 let p2=0
 let turn=1
 
-function potCoin(){
+function setupBoard(){
 
-if(turn===1){
+striker={x:170,y:300,r:10,dx:0,dy:0}
 
-p1++
+coins=[
+{x:170,y:150,r:8,color:"black"},
+{x:150,y:170,r:8,color:"white"},
+{x:190,y:170,r:8,color:"white"},
+{x:150,y:130,r:8,color:"black"},
+{x:190,y:130,r:8,color:"black"},
+{x:170,y:170,r:8,color:"red",queen:true}
+]
 
-turn=2
+}
+
+setupBoard()
+
+function drawCircle(x,y,r,color){
+
+ctx.beginPath()
+ctx.arc(x,y,r,0,Math.PI*2)
+ctx.fillStyle=color
+ctx.fill()
+
+}
+
+function drawBoard(){
+
+ctx.clearRect(0,0,340,340)
+
+drawCircle(striker.x,striker.y,striker.r,"blue")
+
+coins.forEach(c=>{
+drawCircle(c.x,c.y,c.r,c.color)
+})
+
+}
+
+function update(){
+
+striker.x+=striker.dx
+striker.y+=striker.dy
+
+striker.dx*=0.98
+striker.dy*=0.98
+
+coins.forEach((c,i)=>{
+
+let dist=Math.hypot(c.x-striker.x,c.y-striker.y)
+
+if(dist<18){
+
+if(c.queen){
+
+if(turn===1)p1+=3
+else p2+=3
 
 }else{
 
-p2++
+if(turn===1)p1++
+else p2++
 
-turn=1
+}
+
+coins.splice(i,1)
+
+updateScore()
+
+turn=turn===1?2:1
+
+sendMove("pot")
 
 }
 
-document.getElementById("score").innerHTML=
+})
 
-"Player1 : "+p1+"<br>Player2 : "+p2
-
-sendMove(3)
+checkWinner()
 
 }
+
+function updateScore(){
+
+document.getElementById("info").innerHTML=
+"Player1 : "+p1+" | Player2 : "+p2
+
+}
+
+function checkWinner(){
+
+if(coins.length===0){
+
+let winner=p1>p2?"Player1 Wins":"Player2 Wins"
+
+document.getElementById("info").innerHTML=winner
+
+}
+
+}
+
+function shoot(){
+
+striker.dx=(Math.random()*8)-4
+striker.dy=-6
+
+sendMove("shoot")
+
+}
+
+function resetBoard(){
+
+setupBoard()
+
+p1=0
+p2=0
+
+updateScore()
+
+}
+
+function loop(){
+
+update()
+drawBoard()
+
+requestAnimationFrame(loop)
+
+}
+
+loop()
 
 </script>
 
