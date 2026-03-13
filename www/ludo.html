@@ -2,54 +2,40 @@
 <html>
 <head>
 
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ludo</title>
 
-<title>Ludo Game</title>
+<link rel="stylesheet" href="style.css">
 
 <style>
 
-body{
-background:#111;
-color:white;
-font-family:Arial;
-text-align:center;
-}
-
-h1{
-color:#00ffcc;
-}
-
-#board{
+.board{
 display:grid;
-grid-template-columns:repeat(10,40px);
-grid-gap:4px;
+grid-template-columns:repeat(15,30px);
+grid-template-rows:repeat(15,30px);
+gap:2px;
 justify-content:center;
-margin-top:20px;
+margin-top:40px;
 }
 
 .cell{
-width:40px;
-height:40px;
-background:#333;
-border-radius:6px;
-display:flex;
-align-items:center;
-justify-content:center;
+width:30px;
+height:30px;
+background:#222;
 }
 
-.player{
-background:#00ffcc;
-color:black;
-font-weight:bold;
+.red{background:red}
+.blue{background:blue}
+.green{background:green}
+.yellow{background:yellow}
+
+.controls{
+text-align:center;
+margin-top:20px;
 }
 
 button{
-margin-top:20px;
-padding:15px;
-font-size:18px;
-background:#00ffcc;
-border:none;
-border-radius:8px;
+padding:10px 20px;
+font-size:16px;
 }
 
 </style>
@@ -58,65 +44,21 @@ border-radius:8px;
 
 <body>
 
-<h1>Ludo Match</h1>
+<h2 style="text-align:center;">Ludo Game</h2>
 
-<div id="board"></div>
+<div id="board" class="board"></div>
+
+<div class="controls">
 
 <button onclick="rollDice()">Roll Dice</button>
 
+<h3 id="dice">Dice: -</h3>
+
+</div>
+
 <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 <script src="app.js"></script>
-
-<script>
-
-const board=document.getElementById("board")
-
-let cells=[]
-
-for(let i=0;i<100;i++){
-
-const cell=document.createElement("div")
-cell.className="cell"
-cell.innerText=i
-
-board.appendChild(cell)
-
-cells.push(cell)
-
-}
-
-function rollDice(){
-
-const dice=Math.floor(Math.random()*6)+1
-
-sendMove(dice)
-
-}
-
-function updateBoard(data){
-
-const positions=data.positions
-
-cells.forEach(c=>{
-c.classList.remove("player")
-})
-
-for(let player in positions){
-
-let pos=positions[player]
-
-if(cells[pos]){
-
-cells[pos].classList.add("player")
-cells[pos].innerText="P"
-
-}
-
-}
-
-}
-
-</script>
+<script src="ludo.js"></script>
 
 </body>
 </html>
