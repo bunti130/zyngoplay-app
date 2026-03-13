@@ -1,0 +1,6 @@
+{
+  "appId": "com.zyngoplay.app",
+  "appName": "ZyngoPlay",
+  "webDir": "www",
+  "bundledWebRuntime": false
+}
