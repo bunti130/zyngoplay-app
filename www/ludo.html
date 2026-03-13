@@ -2,7 +2,9 @@
 <html>
 
 <head>
+
 <meta name="viewport" content="width=device-width, initial-scale=1">
+
 <title>Ludo Game</title>
 
 <style>
@@ -16,31 +18,36 @@ text-align:center;
 
 h1{
 color:#00ffcc;
+margin-top:20px;
 }
 
 .board{
-width:300px;
-height:300px;
+width:320px;
+height:320px;
 background:#222;
 margin:30px auto;
 display:grid;
 grid-template-columns:repeat(3,1fr);
-grid-gap:5px;
+grid-gap:6px;
 }
 
 .cell{
 background:#333;
-padding:30px;
+padding:35px;
 border-radius:8px;
 }
 
 button{
 background:#00ffcc;
 border:none;
-padding:12px;
+padding:14px;
 border-radius:8px;
 font-size:18px;
 margin-top:20px;
+}
+
+.back{
+background:#444;
 }
 
 </style>
@@ -67,8 +74,14 @@ margin-top:20px;
 
 </div>
 
-<button onclick="alert('Dice Roll Coming Soon')">
+<button onclick="alert('Dice Rolling Coming Soon')">
 Roll Dice
+</button>
+
+<br>
+
+<button class="back" onclick="window.location='index.html'">
+Back to Lobby
 </button>
 
 </body>
