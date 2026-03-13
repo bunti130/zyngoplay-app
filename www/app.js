@@ -1,33 +1,35 @@
 const SERVER_URL = "https://zyngoplay-server.onrender.com";
 
-let socket = null;
+let socket;
 let userId = "user_" + Math.floor(Math.random()*100000);
 
 function connectSocket(){
 
-console.log("Connecting to server...");
-
 socket = io(SERVER_URL);
 
-socket.on("connect", function(){
+socket.on("connect", () => {
 
 console.log("Connected:", socket.id);
 
 });
 
-socket.on("match_found", function(roomId){
+socket.on("match_found", (roomId) => {
 
 console.log("Match found:", roomId);
-
-alert("Match Found!");
 
 joinRoom(roomId);
 
 });
 
-socket.on("players", function(players){
+socket.on("players", (players) => {
 
 console.log("Players in room:", players);
+
+if(players.length >= 2){
+
+alert("Game Starting!");
+
+}
 
 });
 
@@ -35,27 +37,25 @@ console.log("Players in room:", players);
 
 function findMatch(game){
 
-if(!socket){
-connectSocket();
-}
+socket.emit("find_match", {
 
-console.log("Searching match for:", game);
+userId: userId,
+game: game,
+entryFee: 10
 
-socket.emit("find_match",{
-userId:userId,
-game:game,
-entryFee:10
 });
 
 }
 
 function joinRoom(roomId){
 
-socket.emit("join_room",{
-roomId:roomId,
-userId:userId
+socket.emit("join_room", {
+
+roomId: roomId,
+userId: userId
+
 });
 
 }
 
-connectSocket();l
+connectSocket();
