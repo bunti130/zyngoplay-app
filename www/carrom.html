@@ -4,7 +4,7 @@
 <head>
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Carrom Game</title>
+<title>Carrom</title>
 
 <style>
 
@@ -23,13 +23,34 @@ margin-top:20px;
 .board{
 width:320px;
 height:320px;
-background:#222;
+background:#d8a45c;
 margin:30px auto;
-border-radius:20px;
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:40px;
+border-radius:12px;
+position:relative;
+}
+
+.coin{
+width:28px;
+height:28px;
+border-radius:50%;
+position:absolute;
+}
+
+.black{
+background:black;
+}
+
+.white{
+background:white;
+}
+
+.red{
+background:red;
+}
+
+#score{
+font-size:22px;
+margin-top:10px;
 }
 
 button{
@@ -38,7 +59,7 @@ border:none;
 padding:14px;
 border-radius:8px;
 font-size:18px;
-margin-top:20px;
+margin-top:10px;
 }
 
 .back{
@@ -53,19 +74,58 @@ background:#444;
 
 <h1>Carrom Board</h1>
 
-<div class="board">
-⚫ ⚪ ⚫
+<div class="board" id="board">
+
 </div>
 
-<button onclick="alert('Carrom Multiplayer Coming Soon')">
-Play Carrom
+<div id="score">
+Score: 0
+</div>
+
+<button onclick="potCoin()">
+Pot Coin
 </button>
 
 <br>
 
 <button class="back" onclick="window.location='index.html'">
-Back to Lobby
+Back
 </button>
+
+<script>
+
+var score = 0
+
+function createCoins(){
+
+var board = document.getElementById("board")
+
+for(let i=0;i<9;i++){
+
+var coin = document.createElement("div")
+coin.className = "coin black"
+
+coin.style.left = Math.random()*280 + "px"
+coin.style.top = Math.random()*280 + "px"
+
+board.appendChild(coin)
+
+}
+
+}
+
+function potCoin(){
+
+score++
+
+document.getElementById("score").innerHTML =
+"Score: " + score
+
+}
+
+createCoins()
+
+</script>
 
 </body>
 
