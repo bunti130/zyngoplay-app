@@ -4,7 +4,7 @@
 <head>
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Rummy Game</title>
+<title>Rummy</title>
 
 <style>
 
@@ -17,26 +17,6 @@ text-align:center;
 
 h1{
 color:#00ffcc;
-margin-top:20px;
-}
-
-.table{
-width:350px;
-margin:30px auto;
-background:#222;
-padding:20px;
-border-radius:10px;
-}
-
-.cards{
-display:flex;
-flex-wrap:wrap;
-justify-content:center;
-font-size:32px;
-}
-
-.card{
-margin:6px;
 }
 
 button{
@@ -45,11 +25,7 @@ border:none;
 padding:14px;
 border-radius:8px;
 font-size:18px;
-margin-top:15px;
-}
-
-.back{
-background:#444;
+margin:10px;
 }
 
 </style>
@@ -58,52 +34,24 @@ background:#444;
 
 <body>
 
-<h1>Rummy Table</h1>
+<h1>Rummy Game</h1>
 
-<div class="table">
-
-<div id="cards" class="cards">
-
-</div>
-
-<button onclick="dealCards()">
-Deal 13 Cards
+<button onclick="findMatch('rummy')">
+Find Match
 </button>
 
-</div>
+<br>
 
-<button class="back" onclick="window.location='index.html'">
-Back to Lobby
+<button onclick="window.location='index.html'">
+Back
 </button>
 
-<script>
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+<script src="app.js"></script>
 
-var deck=[
-"🂡","🂢","🂣","🂤","🂥","🂦","🂧","🂨","🂩","🂪","🂫","🂭","🂮",
-"🂱","🂲","🂳","🂴","🂵","🂶","🂷","🂸","🂹","🂺","🂻","🂽","🂾"
-]
+</body>
 
-function randomCard(){
-var r=Math.floor(Math.random()*deck.length)
-return deck[r]
-}
-
-function dealCards(){
-
-var container=document.getElementById("cards")
-
-container.innerHTML=""
-
-for(let i=0;i<13;i++){
-
-var card=document.createElement("div")
-card.className="card"
-
-card.innerHTML=randomCard()
-
-container.appendChild(card)
-
-}
+</html>}
 
 }
 
