@@ -61,6 +61,8 @@ margin-top:10px;
 
 <h2>Ludo Multiplayer</h2>
 
+<div id="turn">Turn: Player 1</div>
+
 <div id="dice">🎲</div>
 
 <div id="board" class="board"></div>
@@ -73,9 +75,11 @@ margin-top:10px;
 <script>
 
 let tokens={
-p1:0,
-p2:0
+p1:[0,0,0,0],
+p2:[0,0,0,0]
 }
+
+let turn="p1"
 
 let safeZones=[0,8,13,21,26,34,39,47]
 
@@ -116,8 +120,13 @@ c.innerHTML=i+1
 
 }
 
-document.getElementById("cell"+tokens.p1).innerHTML="🔵"
-document.getElementById("cell"+tokens.p2).innerHTML="🔴"
+tokens.p1.forEach(p=>{
+document.getElementById("cell"+p).innerHTML+=" 🔵"
+})
+
+tokens.p2.forEach(p=>{
+document.getElementById("cell"+p).innerHTML+=" 🔴"
+})
 
 }
 
@@ -133,21 +142,57 @@ sendMove(dice)
 
 function updateBoard(data){
 
-tokens.p1+=data.steps
+let player=data.player
 
-if(tokens.p1>56){
-tokens.p1=56
+let steps=data.steps
+
+tokens[player][0]+=steps
+
+if(tokens[player][0]>56){
+tokens[player][0]=56
 }
 
-if(tokens.p1===tokens.p2 && !safeZones.includes(tokens.p1)){
+checkKill()
 
-tokens.p2=0
+checkWinner()
 
-alert("Player killed!")
+turn = turn==="p1"?"p2":"p1"
 
-}
+document.getElementById("turn").innerHTML="Turn: "+turn
 
 updateBoard()
+
+}
+
+function checkKill(){
+
+tokens.p1.forEach((p,i)=>{
+
+tokens.p2.forEach((p2,j)=>{
+
+if(p===p2 && !safeZones.includes(p)){
+
+tokens.p2[j]=0
+
+alert("Token killed!")
+
+}
+
+})
+
+})
+
+}
+
+function checkWinner(){
+
+if(tokens.p1.every(t=>t===56)){
+alert("Player 1 Wins!")
+}
+
+if(tokens.p2.every(t=>t===56)){
+alert("Player 2 Wins!")
+}
 
 }
 
