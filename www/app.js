@@ -18,7 +18,8 @@ socket.on("match_found", (roomId) => {
 console.log("Match found:", roomId);
 
 joinRoom(roomId);
-
+  
+window.location = "room.html";
 });
 
 socket.on("players", (players) => {
