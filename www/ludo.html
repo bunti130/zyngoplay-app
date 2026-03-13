@@ -15,12 +15,8 @@ font-family:Arial;
 text-align:center;
 }
 
-h2{
-color:#00ffcc;
-}
-
 .board{
-width:350px;
+width:360px;
 margin:20px auto;
 display:grid;
 grid-template-columns:repeat(11,1fr);
@@ -30,8 +26,12 @@ gap:4px;
 .cell{
 background:#333;
 padding:10px;
-font-size:10px;
 border-radius:4px;
+font-size:10px;
+}
+
+.safe{
+background:#444;
 }
 
 .token{
@@ -63,7 +63,7 @@ margin-top:10px;
 
 <div id="dice">🎲</div>
 
-<div class="board" id="board"></div>
+<div id="board" class="board"></div>
 
 <button onclick="rollDice()">Roll Dice</button>
 
@@ -72,7 +72,12 @@ margin-top:10px;
 
 <script>
 
-let position=0
+let tokens={
+p1:0,
+p2:0
+}
+
+let safeZones=[0,8,13,21,26,34,39,47]
 
 function createBoard(){
 
@@ -84,51 +89,65 @@ let cell=document.createElement("div")
 
 cell.className="cell"
 
-cell.id="cell"+i
+if(safeZones.includes(i)){
+cell.classList.add("safe")
+}
 
+cell.id="cell"+i
 cell.innerHTML=i+1
 
 board.appendChild(cell)
 
 }
 
-updateToken()
+updateBoard()
 
 }
 
-function updateToken(){
+function updateBoard(){
 
 for(let i=0;i<57;i++){
 
 let c=document.getElementById("cell"+i)
 
-if(c) c.classList.remove("token")
+if(c){
+c.innerHTML=i+1
+}
 
 }
 
-let t=document.getElementById("cell"+position)
-
-if(t) t.classList.add("token")
+document.getElementById("cell"+tokens.p1).innerHTML="🔵"
+document.getElementById("cell"+tokens.p2).innerHTML="🔴"
 
 }
 
 function rollDice(){
 
-let number=Math.floor(Math.random()*6)+1
+let dice=Math.floor(Math.random()*6)+1
 
-document.getElementById("dice").innerHTML=number
+document.getElementById("dice").innerHTML=dice
 
-sendMove(number)
+sendMove(dice)
 
 }
 
 function updateBoard(data){
 
-position+=data.steps
+tokens.p1+=data.steps
 
-if(position>56) position=56
+if(tokens.p1>56){
+tokens.p1=56
+}
 
-updateToken()
+if(tokens.p1===tokens.p2 && !safeZones.includes(tokens.p1)){
+
+tokens.p2=0
+
+alert("Player killed!")
+
+}
+
+updateBoard()
 
 }
 
