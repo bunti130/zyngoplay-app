@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 
 <title>ZyngoPlay Ludo</title>
+
 <link rel="stylesheet" href="style.css">
 
 <style>
@@ -10,36 +12,41 @@
 body{
 background:#0f0f0f;
 color:white;
-text-align:center;
 font-family:Arial;
+text-align:center;
 }
 
-#board{
+#ludoBoard{
+width:360px;
+height:360px;
+margin:auto;
 display:grid;
-grid-template-columns:repeat(15,30px);
-grid-template-rows:repeat(15,30px);
-gap:2px;
-justify-content:center;
-margin-top:20px;
+grid-template-columns:repeat(15,1fr);
+grid-template-rows:repeat(15,1fr);
+border:4px solid white;
 }
 
 .cell{
-width:30px;
-height:30px;
-background:#222;
+border:1px solid #333;
+display:flex;
+align-items:center;
+justify-content:center;
 }
 
-.red{background:red;}
-.blue{background:blue;}
-.green{background:green;}
-.yellow{background:yellow;}
+.red{background:#ff4d4d;}
+.green{background:#2ecc71;}
+.blue{background:#3498db;}
+.yellow{background:#f1c40f;}
+
+.home{
+border-radius:8px;
+}
 
 .token{
-width:20px;
-height:20px;
+width:18px;
+height:18px;
 border-radius:50%;
-margin:auto;
-margin-top:5px;
+background:white;
 }
 
 .controls{
@@ -50,7 +57,7 @@ button{
 padding:10px 20px;
 font-size:16px;
 border:none;
-border-radius:8px;
+border-radius:6px;
 background:#00ffc3;
 }
 
@@ -62,19 +69,37 @@ background:#00ffc3;
 
 <h2>ZyngoPlay Ludo</h2>
 
-<div id="board"></div>
+<div id="ludoBoard"></div>
 
 <div class="controls">
 
 <button onclick="rollDice()">Roll Dice</button>
 
-<h3 id="dice">Dice: -</h3>
+<h3 id="dice">Dice:</h3>
 
 </div>
 
 <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+
+<script>
+
+const board=document.getElementById("ludoBoard")
+
+for(let i=0;i<225;i++){
+
+let cell=document.createElement("div")
+
+cell.className="cell"
+
+board.appendChild(cell)
+
+}
+
+</script>
+
 <script src="app.js"></script>
 <script src="ludo.js"></script>
 
 </body>
+
 </html>
