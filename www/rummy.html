@@ -1,12 +1,6 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Rummy Multiplayer</title>
-
-<style>
+<!DOCTYPE html><html>
+<head><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ZyngoPlay Rummy</title><style>
 
 body{
 background:#111;
@@ -16,8 +10,8 @@ text-align:center;
 }
 
 .table{
-width:370px;
-margin:auto;
+width:380px;
+margin:20px auto;
 background:#1a1a1a;
 padding:20px;
 border-radius:10px;
@@ -27,7 +21,7 @@ border-radius:10px;
 display:flex;
 flex-wrap:wrap;
 justify-content:center;
-font-size:30px;
+font-size:28px;
 margin:10px;
 }
 
@@ -36,103 +30,93 @@ margin:4px;
 }
 
 button{
-background:#00ffcc;
+background:#00ffc3;
 border:none;
 padding:10px;
 border-radius:6px;
-margin:5px;
+margin:4px;
 }
 
 #discard{
-font-size:32px;
+font-size:30px;
 margin-top:10px;
 }
 
 #winner{
 margin-top:10px;
-color:#00ffcc;
-font-size:18px;
+color:#00ffc3;
 }
 
-</style>
-
-</head>
-
-<body>
-
-<h2>Rummy Table</h2>
-
-<div class="table">
-
-<div>Your Hand</div>
-
-<div id="hand" class="cards"></div>
-
-<div>Discard Pile</div>
-
-<div id="discard">🂠</div>
-
-<div id="winner"></div>
-
-<button onclick="deal()">Deal</button>
+</style></head><body><h2>ZyngoPlay Rummy</h2><div class="table"><div>Your Hand</div>
+<div id="hand" class="cards"></div><div>Discard Pile</div>
+<div id="discard"></div><div id="winner"></div><button onclick="startGame()">Deal</button>
 <button onclick="drawCard()">Draw</button>
 <button onclick="discardCard()">Discard</button>
 <button onclick="declareRummy()">Declare Rummy</button>
 
-</div>
+</div><script>
 
-<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
-<script src="app.js"></script>
+/* =========================
+   GAME STATE
+========================= */
 
-<script>
-
-let deck=[
-"A","2","3","4","5","6","7","8","9","10","J","Q","K"
-]
-
-let suits=["♠","♥","♦","♣"]
-
+let deck=[]
 let hand=[]
-let discard="🂠"
+let discard=""
 
-function randomCard(){
+/* =========================
+   DECK SYSTEM
+========================= */
 
-let v=deck[Math.floor(Math.random()*deck.length)]
-let s=suits[Math.floor(Math.random()*suits.length)]
+function createDeck(){
 
-return v+s
+const suits=["♠","♥","♦","♣"]
+const values=["A","2","3","4","5","6","7","8","9","10","J","Q","K"]
+
+deck=[]
+
+for(let s of suits){
+for(let v of values){
+deck.push(v+s)
+}
+}
 
 }
 
-function render(){
+function shuffle(){
 
-let container=document.getElementById("hand")
+for(let i=deck.length-1;i>0;i--){
 
-container.innerHTML=""
+let j=Math.floor(Math.random()*(i+1))
 
-hand.forEach(c=>{
-
-let div=document.createElement("div")
-
-div.className="card"
-
-div.innerHTML=c
-
-container.appendChild(div)
-
-})
+let temp=deck[i]
+deck[i]=deck[j]
+deck[j]=temp
 
 }
 
-function deal(){
+}
+
+function draw(){
+return deck.pop()
+}
+
+/* =========================
+   GAME START
+========================= */
+
+function startGame(){
+
+createDeck()
+shuffle()
 
 hand=[]
 
 for(let i=0;i<13;i++){
-
-hand.push(randomCard())
-
+hand.push(draw())
 }
+
+discard=""
 
 render()
 
@@ -140,59 +124,127 @@ document.getElementById("winner").innerHTML=""
 
 }
 
-function drawCard(){
+/* =========================
+   UI RENDER
+========================= */
 
-let card=randomCard()
+function render(){
 
-hand.push(card)
+let container=document.getElementById("hand")
+container.innerHTML=""
 
-render()
+hand.forEach(c=>{
 
-sendMove("draw")
+let div=document.createElement("div")
+div.className="card"
+div.innerHTML=c
 
-}
+container.appendChild(div)
 
-function discardCard(){
-
-if(hand.length===0)return
-
-discard=hand.pop()
+})
 
 document.getElementById("discard").innerHTML=discard
 
-render()
+}
 
-sendMove("discard")
+/* =========================
+   DRAW CARD
+========================= */
+
+function drawCard(){
+
+let card=draw()
+
+if(card){
+
+hand.push(card)
 
 }
 
+render()
+
+}
+
+/* =========================
+   DISCARD CARD
+========================= */
+
+function discardCard(){
+
+if(hand.length==0) return
+
+discard=hand.pop()
+
+render()
+
+}
+
+/* =========================
+   CARD VALUE
+========================= */
+
+function value(card){
+
+let v=card.slice(0,-1)
+
+if(v=="A") return 1
+if(v=="J") return 11
+if(v=="Q") return 12
+if(v=="K") return 13
+
+return parseInt(v)
+
+}
+
+/* =========================
+   SEQUENCE CHECK
+========================= */
+
 function checkSequence(){
 
-let values=hand.map(c=>c.slice(0,-1))
+let values=hand.map(c=>value(c)).sort((a,b)=>a-b)
 
-let unique=new Set(values)
+let count=1
 
-if(unique.size<hand.length-2){
-return true
+for(let i=1;i<values.length;i++){
+
+if(values[i]==values[i-1]+1){
+
+count++
+
+if(count>=3) return true
+
+}else{
+
+count=1
+
+}
+
 }
 
 return false
 
 }
+
+/* =========================
+   SET CHECK
+========================= */
 
 function checkSet(){
 
 let values=hand.map(c=>c.slice(0,-1))
 
-let count={}
+let counts={}
 
 values.forEach(v=>{
-count[v]=(count[v]||0)+1
+
+counts[v]=(counts[v]||0)+1
+
 })
 
-for(let v in count){
+for(let v in counts){
 
-if(count[v]>=3){
+if(counts[v]>=3){
 return true
 }
 
@@ -202,17 +254,18 @@ return false
 
 }
 
+/* =========================
+   DECLARE RUMMY
+========================= */
+
 function declareRummy(){
 
 let seq=checkSequence()
-
 let set=checkSet()
 
 if(seq && set){
 
 document.getElementById("winner").innerHTML="Rummy Declared! You Win"
-
-sendMove("rummy_win")
 
 }else{
 
@@ -222,8 +275,14 @@ document.getElementById("winner").innerHTML="Invalid Rummy"
 
 }
 
-</script>
+/* =========================
+   FUTURE MULTIPLAYER HOOK
+========================= */
 
-</body>
+/*
+socket.emit("rummy_move")
+socket.on("rummy_update")
+*/
 
+</script></body>
 </html>
