@@ -202,11 +202,12 @@ socket.emit("find_match",{
 
 socket.on("match_found",(data)=>{
 
-document.getElementById("loading").style.display="none"
+ document.getElementById("loading").style.display="none"
 
-localStorage.setItem("roomId",data.room)
+ localStorage.setItem("roomId",data.room)
 
-window.location="/zyngoplay-app/"+data.game+".html"
+ window.location.href="./"+data.game+".html"
+
 })
 
 /* ======================
