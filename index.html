@@ -189,9 +189,9 @@ return
 
 document.getElementById("loading").style.display="flex"
 
-socket.emit("join_queue",{
-game:game,
-fee:fee
+socket.emit("find_match",{
+ userId:Date.now(),
+ game:game
 })
 
 }
