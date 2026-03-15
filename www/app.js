@@ -114,15 +114,12 @@ updateCarrom(data);
 
 function findMatch(game){
 
-console.log("Finding match:",game);
+ game = game.toLowerCase()
 
-socket.emit("find_match",{
-
-userId:userId,
-game:game,
-entryFee:10
-
-});
+ socket.emit("find_match",{
+  userId:userId,
+  game:game
+ })
 
 }
 
