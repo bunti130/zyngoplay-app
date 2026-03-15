@@ -1,6 +1,12 @@
-<!DOCTYPE html><html>
-<head><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ZyngoPlay</title><style>
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>ZyngoPlay</title>
+
+<style>
 
 body{
 margin:0;
@@ -8,8 +14,6 @@ background:#0f0f0f;
 color:white;
 font-family:Arial;
 }
-
-/* HEADER */
 
 .header{
 display:flex;
@@ -32,8 +36,6 @@ font-size:14px;
 .profile{
 font-size:14px;
 }
-
-/* GAME GRID */
 
 .container{
 padding:15px;
@@ -62,8 +64,6 @@ border-radius:6px;
 font-weight:bold;
 }
 
-/* MATCHMAKING */
-
 .match-box{
 background:#1e1e1e;
 margin:15px;
@@ -84,8 +84,6 @@ padding:6px 12px;
 border-radius:5px;
 }
 
-/* FOOTER */
-
 .footer{
 position:fixed;
 bottom:0;
@@ -95,12 +93,6 @@ display:flex;
 justify-content:space-around;
 padding:10px 0;
 }
-
-.footer div{
-font-size:14px;
-}
-
-/* LOADING */
 
 .loading{
 position:fixed;
@@ -115,66 +107,115 @@ align-items:center;
 font-size:20px;
 }
 
-</style></head><body><!-- HEADER --><div class="header"><div class="logo">
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+
+<div class="logo">
 ZyngoPlay
-</div><div class="wallet">
-ðŸ’° <span id="coins">100</span> Coins
-</div><div class="profile">
-ðŸ‘¤ Player
-</div></div><!-- GAME LIST --><div class="container"><div class="game-card">
-<div class="game-title">ðŸŽ² Ludo</div>
+</div>
+
+<div class="wallet">
+💰 <span id="coins">100</span> Coins
+</div>
+
+<div class="profile">
+👤 Player
+</div>
+
+</div>
+
+
+<div class="container">
+
+<div class="game-card">
+<div class="game-title">🎲 Ludo</div>
 <button class="play-btn" onclick="playGame('ludo')">Play</button>
-</div><div class="game-card">
-<div class="game-title">â™  Poker</div>
+</div>
+
+<div class="game-card">
+<div class="game-title">🃏 Poker</div>
 <button class="play-btn" onclick="playGame('poker')">Play</button>
-</div><div class="game-card">
-<div class="game-title">ðŸƒ Rummy</div>
+</div>
+
+<div class="game-card">
+<div class="game-title">🂡 Rummy</div>
 <button class="play-btn" onclick="playGame('rummy')">Play</button>
-</div><div class="game-card">
-<div class="game-title">âš« Carrom</div>
+</div>
+
+<div class="game-card">
+<div class="game-title">⚫ Carrom</div>
 <button class="play-btn" onclick="playGame('carrom')">Play</button>
-</div></div><!-- MATCHMAKING --><div class="match-box"><div><b>Quick Match</b></div><div class="match-row">
+</div>
+
+</div>
+
+
+<div class="match-box">
+
+<b>Quick Match</b>
+
+<div class="match-row">
 <div>Ludo Entry</div>
 <div>10 Coins</div>
 <button class="join-btn" onclick="joinQueue('ludo',10)">Join</button>
-</div><div class="match-row">
+</div>
+
+<div class="match-row">
 <div>Poker Entry</div>
 <div>20 Coins</div>
 <button class="join-btn" onclick="joinQueue('poker',20)">Join</button>
-</div><div class="match-row">
+</div>
+
+<div class="match-row">
 <div>Rummy Entry</div>
 <div>15 Coins</div>
 <button class="join-btn" onclick="joinQueue('rummy',15)">Join</button>
-</div></div><!-- FOOTER --><div class="footer"><div>ðŸ  Home</div>
-<div>ðŸŽ® Games</div>
-<div onclick="openWallet()">ðŸ’° Wallet</div>
-<div>ðŸ‘¤ Profile</div></div><!-- LOADING --><div id="loading" class="loading">
+</div>
+
+</div>
+
+
+<div class="footer">
+
+<div>🏠 Home</div>
+
+<div>🎮 Games</div>
+
+<div onclick="openWallet()">💰 Wallet</div>
+
+<div>👤 Profile</div>
+
+</div>
+
+
+<div id="loading" class="loading">
 Finding Player...
-</div><script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script><script>
+</div>
 
-/* ======================
-   SOCKET CONNECT
-====================== */
 
-let socket = io("https://zyngoplay-server.onrender.com",{
- transports:["websocket"]
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+
+<script>
+
+
+const socket = io("https://zyngoplay-server.onrender.com",{
+transports:["websocket"]
 })
 
-/* ======================
-   PLAY GAME
-====================== */
 
 function playGame(game){
 
 localStorage.setItem("selectedGame",game)
 
-window.location=game+".html"
+window.location.href = game + ".html"
 
 }
 
-/* ======================
-   MATCHMAKING
-====================== */
 
 function joinQueue(game,fee){
 
@@ -183,6 +224,7 @@ let coins=parseInt(document.getElementById("coins").innerText)
 if(coins<fee){
 
 alert("Not enough coins")
+
 return
 
 }
@@ -190,29 +232,26 @@ return
 document.getElementById("loading").style.display="flex"
 
 socket.emit("find_match",{
- userId:Date.now(),
- game:game
+
+userId:Date.now(),
+
+game:game
+
 })
 
 }
 
-/* ======================
-   MATCH FOUND
-====================== */
 
 socket.on("match_found",(data)=>{
 
- document.getElementById("loading").style.display="none"
+document.getElementById("loading").style.display="none"
 
- localStorage.setItem("roomId",data.room)
+localStorage.setItem("roomId",data.room)
 
- window.location.href="./"+data.game+".html"
+window.location.href = data.game + ".html"
 
 })
 
-/* ======================
-   WALLET
-====================== */
 
 function openWallet(){
 
@@ -220,5 +259,7 @@ alert("Wallet system coming soon")
 
 }
 
-</script></body>
+</script>
+
+</body>
 </html>
