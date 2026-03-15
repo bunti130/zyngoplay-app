@@ -1,1 +1,308 @@
-l
+<!DOCTYPE html><html>
+<head><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ZyngoPlay Carrom</title><style>
+
+body{
+background:#111;
+color:white;
+font-family:Arial;
+text-align:center;
+}
+
+canvas{
+background:#d8b36a;
+border:8px solid #5a3a14;
+margin-top:20px;
+border-radius:10px;
+}
+
+button{
+background:#00ffc3;
+border:none;
+padding:10px;
+border-radius:6px;
+margin:5px;
+}
+
+#info{
+margin-top:10px;
+font-size:18px;
+color:#00ffc3;
+}
+
+</style></head><body><h2>ZyngoPlay Carrom</h2><canvas id="board" width="400" height="400"></canvas>
+
+<div id="info">
+Player1: 0 | Player2: 0
+</div><button onclick="shoot()">Shoot</button>
+<button onclick="resetBoard()">Reset</button>
+
+<script>
+
+/* =========================
+   CANVAS
+========================= */
+
+const canvas=document.getElementById("board")
+const ctx=canvas.getContext("2d")
+
+/* =========================
+   GAME STATE
+========================= */
+
+let striker
+let coins=[]
+
+let p1=0
+let p2=0
+let turn=1
+
+const friction=0.98
+
+const pockets=[
+{x:20,y:20},
+{x:380,y:20},
+{x:20,y:380},
+{x:380,y:380}
+]
+
+/* =========================
+   SETUP BOARD
+========================= */
+
+function setupBoard(){
+
+striker={
+x:200,
+y:350,
+r:12,
+dx:0,
+dy:0
+}
+
+coins=[
+
+{x:200,y:200,r:10,color:"red",queen:true},
+
+{x:180,y:200,r:10,color:"black"},
+{x:220,y:200,r:10,color:"white"},
+{x:200,y:180,r:10,color:"black"},
+{x:200,y:220,r:10,color:"white"},
+
+{x:180,y:180,r:10,color:"white"},
+{x:220,y:220,r:10,color:"black"}
+
+]
+
+}
+
+setupBoard()
+
+/* =========================
+   DRAW
+========================= */
+
+function drawCircle(x,y,r,color){
+
+ctx.beginPath()
+ctx.arc(x,y,r,0,Math.PI*2)
+ctx.fillStyle=color
+ctx.fill()
+
+}
+
+function drawBoard(){
+
+ctx.clearRect(0,0,400,400)
+
+pockets.forEach(p=>{
+drawCircle(p.x,p.y,14,"black")
+})
+
+drawCircle(striker.x,striker.y,striker.r,"blue")
+
+coins.forEach(c=>{
+drawCircle(c.x,c.y,c.r,c.color)
+})
+
+}
+
+/* =========================
+   WALL BOUNCE
+========================= */
+
+function wallBounce(obj){
+
+if(obj.x-obj.r<0 || obj.x+obj.r>400){
+obj.dx*=-1
+}
+
+if(obj.y-obj.r<0 || obj.y+obj.r>400){
+obj.dy*=-1
+}
+
+}
+
+/* =========================
+   COLLISION
+========================= */
+
+function collide(a,b){
+
+let dx=b.x-a.x
+let dy=b.y-a.y
+
+let dist=Math.hypot(dx,dy)
+
+if(dist<a.r+b.r){
+
+let angle=Math.atan2(dy,dx)
+
+let force=2
+
+b.dx=Math.cos(angle)*force
+b.dy=Math.sin(angle)*force
+
+}
+
+}
+
+/* =========================
+   POCKET CHECK
+========================= */
+
+function checkPocket(c,i){
+
+pockets.forEach(p=>{
+
+let d=Math.hypot(c.x-p.x,c.y-p.y)
+
+if(d<18){
+
+if(c.queen){
+
+if(turn==1) p1+=3
+else p2+=3
+
+}else{
+
+if(turn==1) p1++
+else p2++
+
+}
+
+coins.splice(i,1)
+
+updateScore()
+
+}
+
+})
+
+}
+
+/* =========================
+   UPDATE
+========================= */
+
+function update(){
+
+striker.x+=striker.dx
+striker.y+=striker.dy
+
+striker.dx*=friction
+striker.dy*=friction
+
+wallBounce(striker)
+
+coins.forEach((c,i)=>{
+
+c.x+=c.dx||0
+c.y+=c.dy||0
+
+c.dx*=friction
+c.dy*=friction
+
+wallBounce(c)
+
+collide(striker,c)
+
+checkPocket(c,i)
+
+})
+
+}
+
+/* =========================
+   SCORE
+========================= */
+
+function updateScore(){
+
+document.getElementById("info").innerHTML=
+"Player1: "+p1+" | Player2: "+p2
+
+if(coins.length==0){
+
+let winner=p1>p2?"Player1 Wins":"Player2 Wins"
+
+document.getElementById("info").innerHTML=winner
+
+}
+
+}
+
+/* =========================
+   SHOOT
+========================= */
+
+function shoot(){
+
+striker.dx=(Math.random()*8)-4
+striker.dy=-8
+
+turn=turn==1?2:1
+
+}
+
+/* =========================
+   RESET
+========================= */
+
+function resetBoard(){
+
+setupBoard()
+
+p1=0
+p2=0
+
+updateScore()
+
+}
+
+/* =========================
+   GAME LOOP
+========================= */
+
+function loop(){
+
+update()
+drawBoard()
+
+requestAnimationFrame(loop)
+
+}
+
+loop()
+
+/* =========================
+   FUTURE MULTIPLAYER HOOK
+========================= */
+
+/*
+socket.emit("carrom_move")
+socket.on("carrom_update")
+*/
+
+</script></body>
+</html>
