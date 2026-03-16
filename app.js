@@ -4,9 +4,9 @@ let socket;
 let userId = "user_" + Math.floor(Math.random()*100000);
 let currentRoom = null;
 
-/* ================================
+/* =============================
 CONNECT SOCKET
-================================ */
+============================= */
 
 function connectSocket(){
 
@@ -18,7 +18,9 @@ socket.on("connect",()=>{
 console.log("Connected:",socket.id);
 });
 
-/* MATCH FOUND */
+/* =============================
+MATCH FOUND
+============================= */
 
 socket.on("match_found",(roomId)=>{
 
@@ -50,49 +52,67 @@ window.location="carrom.html";
 
 });
 
-/* ROOM PLAYERS */
+/* =============================
+ROOM PLAYERS
+============================= */
 
 socket.on("players",(players)=>{
 console.log("Players:",players);
 });
 
-/* LUDO UPDATE */
+/* =============================
+LUDO UPDATE
+============================= */
 
 socket.on("ludo_update",(data)=>{
+
 if(typeof updateBoard==="function"){
 updateBoard(data);
 }
+
 });
 
-/* POKER UPDATE */
+/* =============================
+POKER UPDATE
+============================= */
 
 socket.on("poker_update",(data)=>{
+
 if(typeof updatePoker==="function"){
 updatePoker(data);
 }
+
 });
 
-/* RUMMY UPDATE */
+/* =============================
+RUMMY UPDATE
+============================= */
 
 socket.on("rummy_update",(data)=>{
+
 if(typeof updateRummy==="function"){
 updateRummy(data);
 }
+
 });
 
-/* CARROM UPDATE */
+/* =============================
+CARROM UPDATE
+============================= */
 
 socket.on("carrom_update",(data)=>{
+
 if(typeof updateCarrom==="function"){
 updateCarrom(data);
 }
+
 });
 
 }
 
-/* ================================
+/* =============================
 MATCHMAKING
-================================ */
+============================= */
 
 function findMatch(game){
 
@@ -105,21 +125,23 @@ game:game
 
 }
 
-/* ================================
+/* =============================
 START GAME
-================================ */
+============================= */
 
-function startGame(game){
+function playGame(game){
 
 localStorage.setItem("selectedGame",game);
+
+document.getElementById("loading").style.display="flex";
 
 findMatch(game);
 
 }
 
-/* ================================
+/* =============================
 JOIN ROOM
-================================ */
+============================= */
 
 function joinRoom(roomId){
 
@@ -130,9 +152,9 @@ userId:userId
 
 }
 
-/* ================================
+/* =============================
 LUDO MOVE
-================================ */
+============================= */
 
 function sendMove(steps){
 
@@ -144,9 +166,9 @@ steps:steps
 
 }
 
-/* ================================
+/* =============================
 POKER ACTION
-================================ */
+============================= */
 
 function pokerAction(action){
 
@@ -158,9 +180,9 @@ action:action
 
 }
 
-/* ================================
+/* =============================
 RUMMY DRAW
-================================ */
+============================= */
 
 function rummyDraw(){
 
@@ -171,9 +193,9 @@ player:userId
 
 }
 
-/* ================================
+/* =============================
 RUMMY DISCARD
-================================ */
+============================= */
 
 function rummyDiscard(card){
 
@@ -185,9 +207,9 @@ card:card
 
 }
 
-/* ================================
+/* =============================
 CARROM POT
-================================ */
+============================= */
 
 function carromPot(){
 
@@ -198,8 +220,8 @@ player:userId
 
 }
 
-/* ================================
+/* =============================
 START SOCKET
-================================ */
+============================= */
 
 connectSocket();
