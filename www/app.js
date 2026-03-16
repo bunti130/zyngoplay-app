@@ -109,11 +109,16 @@ game:game
 START GAME
 ================================ */
 
-function startGame(game){
+function playGame(game){
 
-localStorage.setItem("selectedGame",game);
+localStorage.setItem("selectedGame", game)
 
-findMatch(game);
+document.getElementById("loading").style.display="flex"
+
+socket.emit("find_match",{
+userId:Date.now(),
+game:game
+})
 
 }
 
