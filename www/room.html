@@ -1,12 +1,4 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Game Room</title>
-
-<style>
+<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width, initial-scale=1"><title>ZyngoPlay Room</title><link rel="stylesheet" href="style.css"><style>
 
 body{
 background:#111;
@@ -24,7 +16,7 @@ color:#00ffcc;
 }
 
 .container{
-padding:20px;
+padding:30px;
 }
 
 .player{
@@ -35,51 +27,40 @@ border-radius:8px;
 font-size:18px;
 }
 
-button{
-background:#00ffcc;
-border:none;
-padding:14px;
-border-radius:8px;
-font-size:18px;
-margin-top:20px;
-}
-
-</style>
-
-</head>
-
-<body>
-
-<div class="header">
-Game Room
-</div>
-
-<div class="container">
-
-<div class="player" id="player1">
+</style></head><body><div class="header">
+ZyngoPlay Match Room
+</div><div class="container"><div class="player" id="player1">
 Waiting for player...
-</div>
-
-<div class="player" id="player2">
+</div><div class="player" id="player2">
 Waiting for player...
-</div>
+</div><p id="status">Connecting to server...</p></div><script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script><script>
 
-<button onclick="startGame()">
-Start Game
-</button>
+const socket = io("https://zyngoplay-server.onrender.com",{
+transports:["websocket"]
+})
 
-</div>
+const game = localStorage.getItem("selectedGame")
 
-<script>
+socket.on("connect",()=>{
+document.getElementById("status").innerText="Waiting for opponent..."
+})
 
-function startGame(){
+socket.on("match_found",(data)=>{
 
-alert("Game Starting...")
+document.getElementById("player1").innerText="Player 1 Connected"
+document.getElementById("player2").innerText="Player 2 Connected"
 
-}
+document.getElementById("status").innerText="Match Found!"
 
-</script>
+localStorage.setItem("roomId",data.room)
 
-</body>
+setTimeout(()=>{
 
+window.location.href = game + ".html"
+
+},1500)
+
+})
+
+</script></body>
 </html>
