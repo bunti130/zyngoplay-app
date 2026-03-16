@@ -1,113 +1,13 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <title>ZyngoPlay</title>
 
-<style>
-
-body{
-margin:0;
-background:#0f0f0f;
-color:white;
-font-family:Arial;
-}
-
-.header{
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:12px;
-background:#1a1a1a;
-}
-
-.logo{
-font-size:20px;
-font-weight:bold;
-color:#00ffc3;
-}
-
-.wallet{
-font-size:14px;
-}
-
-.profile{
-font-size:14px;
-}
-
-.container{
-padding:15px;
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:12px;
-}
-
-.game-card{
-background:#1e1e1e;
-padding:15px;
-border-radius:10px;
-text-align:center;
-}
-
-.game-title{
-font-size:18px;
-margin-bottom:10px;
-}
-
-.play-btn{
-background:#00ffc3;
-border:none;
-padding:8px 15px;
-border-radius:6px;
-font-weight:bold;
-}
-
-.match-box{
-background:#1e1e1e;
-margin:15px;
-padding:15px;
-border-radius:10px;
-}
-
-.match-row{
-display:flex;
-justify-content:space-between;
-margin-top:8px;
-}
-
-.join-btn{
-background:#ffcc00;
-border:none;
-padding:6px 12px;
-border-radius:5px;
-}
-
-.footer{
-position:fixed;
-bottom:0;
-width:100%;
-background:#1a1a1a;
-display:flex;
-justify-content:space-around;
-padding:10px 0;
-}
-
-.loading{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:#000000dd;
-display:none;
-justify-content:center;
-align-items:center;
-font-size:20px;
-}
-
-</style>
+<link rel="stylesheet" href="style.css">
 
 </head>
 
@@ -138,12 +38,12 @@ ZyngoPlay
 </div>
 
 <div class="game-card">
-<div class="game-title">🃏 Poker</div>
+<div class="game-title">♠ Poker</div>
 <button class="play-btn" onclick="playGame('poker')">Play</button>
 </div>
 
 <div class="game-card">
-<div class="game-title">🂡 Rummy</div>
+<div class="game-title">🃏 Rummy</div>
 <button class="play-btn" onclick="playGame('rummy')">Play</button>
 </div>
 
@@ -199,14 +99,10 @@ Finding Player...
 
 
 <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+<script src="app.js"></script>
+
 
 <script>
-
-
-const socket = io("https://zyngoplay-server.onrender.com",{
-transports:["websocket"]
-})
-
 
 function playGame(game){
 
@@ -215,7 +111,6 @@ localStorage.setItem("selectedGame",game)
 window.location.href = game + ".html"
 
 }
-
 
 function joinQueue(game,fee){
 
@@ -240,18 +135,6 @@ game:game
 })
 
 }
-
-
-socket.on("match_found",(data)=>{
-
-document.getElementById("loading").style.display="none"
-
-localStorage.setItem("roomId",data.room)
-
-window.location.href = data.game + ".html"
-
-})
-
 
 function openWallet(){
 
