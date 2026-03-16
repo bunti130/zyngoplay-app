@@ -217,3 +217,35 @@ player:userId
 /* START SOCKET */
 
 connectSocket();
+
+/* ================================
+ZyngoPlay Multiplayer Connection
+================================ */
+
+const socket = io("http://localhost:3000");
+
+let currentRoom=null;
+
+socket.on("connect",()=>{
+console.log("Connected:",socket.id)
+})
+
+socket.on("match_found",(data)=>{
+
+currentRoom=data.room
+
+document.getElementById("loading").style.display="none"
+
+window.location.href="room.html"
+
+})
+
+function sendMove(move){
+
+socket.emit("player_move",{
+room:currentRoom,
+move:move
+})
+
+}
+
